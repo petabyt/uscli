@@ -1,3 +1,6 @@
+// Information manually translated from
+// https://github.com/markbiek/constitution.json
+
 struct Constitution {
 	char *article_1[10];
 	char *article_2[4];

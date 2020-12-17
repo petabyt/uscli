@@ -20,6 +20,15 @@ void printBreak(char string[]) {
 }
 
 int main(int argc, char *argv[]) {
+	if (argc == 1) {
+		puts("Usage: uscli [options]");
+		puts("  -t\tGet Article");
+		puts("  -p\tGet Paragraph (of article)");
+		puts("  -a\tGet Amendment");
+		puts("  -r\tGet Preamble");
+		return 0;
+	}
+
 	size_t article = 0;
 	size_t paragraph = 0;
 	size_t amendment = 0;
@@ -39,6 +48,9 @@ int main(int argc, char *argv[]) {
 			case 't':
 				toset = &article;
 				break;
+			case 'r':
+				printBreak(constitution.preamble);
+				return 0;
 			}
 
 			// Skip..
@@ -52,8 +64,13 @@ int main(int argc, char *argv[]) {
 			*toset += (size_t)argv[i][c] - '0';
 			c++;
 		}
-	}
 
+		if (*toset == 0) {
+			puts("Start at 1, not zero.");
+			return 0;
+		}
+	}
+	
 	// Print article or amendment
 	if (article != 0) {
 		// Use pointer to select location of chapter
@@ -71,13 +88,16 @@ int main(int argc, char *argv[]) {
 			printBreak(articlep[paragraph - 1]);
 		} else {
 			size_t length = sizeof(**articlep) / sizeof(articlep[0]);
-			printf("%zu", length);
 			for (size_t i = 0; i < length; i++) {
 				printBreak(articlep[i]);
 			}
 		}
 	} else if (amendment != 0) {
 		printBreak(constitution.amendments[paragraph - 1]);
+	} else {
+		puts("No text requested.");
 	}
+
+	return 0;
 }
 
